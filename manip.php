@@ -1,13 +1,27 @@
 <?php
 
-function encode($N,$alphabet,$msg){
+$alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+$N = 3;
+function encode($msg){
 
   // Initialization
-
+  global $alphabet, $N;
+  $msg = mb_strtoupper($msg);
+  //if(explode("||", $msg, 3).);
+  $split_msg = explode("||", $msg, 3);
+  if(count($split_msg)>1)
+  {
+	$N = end($split_msg);
+	$msg = $split_msg[0];
+  }
+  
+  
   $M = count($alphabet);
   $encrypt = array();
   $encode = array();
   $plain = preg_split("//",$msg, -1, PREG_SPLIT_NO_EMPTY);
+  
+  //return join('',$plain);
   
   $encode[' '] = ' ';
   foreach ($alphabet as $n=>$v){
@@ -15,16 +29,28 @@ function encode($N,$alphabet,$msg){
   }
 
   foreach ($plain as $v){
-    $encrypt[] = $encode[$v];
+	if(ctype_alpha($v))
+		$encrypt[] = $encode[$v];
+	else
+		$encrypt[] = $v;
   }
 
   return join('',$encrypt);
 }
 
-function decode($N,$alphabet,$msg){
+function decode($msg){
 
   // Initialization
-
+  global $alphabet, $N;
+  $msg = mb_strtoupper($msg);
+  //if(explode("||", $msg, 3).);
+  $split_msg = explode("||", $msg, 3);
+  if(count($split_msg)>1)
+  {
+	$N = end($split_msg);
+	$msg = $split_msg[0];
+  }
+  
   $M = count($alphabet);
   $decrypt = array();
   $decode = array();
@@ -38,7 +64,10 @@ function decode($N,$alphabet,$msg){
   }
 
   foreach ($encrypted as $v){
-    $decrypt[] = $decode[$v];
+	if(ctype_alpha($v))
+		$decrypt[] = $decode[$v];
+	else
+		$decrypt[] = $v;
   }
 
   return join('',$decrypt);
